@@ -148,6 +148,38 @@ export class TransactionProcessor {
     };
   }
 
+  createPayoutEntry(transaction: Stripe.BalanceTransaction): NocfoEntryInput {
+    return {
+      blueprint_type: 'MANUAL',
+      contact_id: null,
+      blueprint: {
+        debet_entries: [
+          {
+            account_id: 4970965,
+            description: null,
+            vat_code: 3,
+            vat_rate: 0,
+            vat_method: 0,
+            amount: Math.abs(transaction.amount) / 100,
+          },
+        ],
+        credit_entries: [
+          {
+            account_id: 4982339,
+            description: null,
+            vat_code: 3,
+            vat_rate: 0,
+            vat_method: 0,
+            amount: Math.abs(transaction.amount) / 100,
+          },
+        ],
+      },
+      attachment_ids: [],
+      date: new Date(transaction.created * 1000).toISOString().split('T')[0]!,
+      description: `${transaction.id} - Stripe to Bank Account transfer - ${transaction.description}`,
+    };
+  }
+
   async createEntryFromTransaction(
     transaction: Stripe.BalanceTransaction,
     nocfoEntries: NocfoEntry[]
@@ -158,6 +190,8 @@ export class TransactionProcessor {
       return this.createStripeFeeEntry(transaction);
     } else if (transaction.type === 'refund') {
       return this.createRefundEntry(transaction, nocfoEntries);
+    } else if (transaction.type === 'payout') {
+      return this.createPayoutEntry(transaction);
     } else {
       return null; // Unhandled transaction type
     }
