@@ -6,6 +6,7 @@ export interface NocfoEntry {
       account_id: number;
       vat_code: number;
       vat_rate: number;
+      vat_method?: number;
       amount: number;
       description?: string | null;
     }>;
@@ -13,6 +14,7 @@ export interface NocfoEntry {
       account_id: number;
       vat_code: number;
       vat_rate: number;
+      vat_method?: number;
       amount: number;
       defaultEntryData?: {
         account_id: number | null;
@@ -44,6 +46,7 @@ export interface NocfoEntryInput {
       account_id: number;
       vat_code: number;
       vat_rate: number;
+      vat_method?: number;
       amount: number;
       description?: string | null;
     }>;
@@ -51,6 +54,7 @@ export interface NocfoEntryInput {
       account_id: number;
       vat_code: number;
       vat_rate: number;
+      vat_method?: number;
       amount: number;
       defaultEntryData?: {
         account_id: number | null;

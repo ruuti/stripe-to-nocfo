@@ -63,6 +63,24 @@ export const mockStripeTransactions: Stripe.BalanceTransaction[] = [
     source: 're_1234567890',
     balance_type: 'available' as Stripe.BalanceTransaction.BalanceType,
   },
+  {
+    id: 'txn_payout_123',
+    object: 'balance_transaction',
+    amount: -10000, // -100.00 EUR (negative for payout)
+    currency: 'eur',
+    description: 'Payout to bank account',
+    fee: 0,
+    fee_details: [],
+    net: -10000,
+    status: 'available',
+    type: 'payout',
+    created: 1749069614, // 2025-02-03
+    available_on: 1749069614,
+    exchange_rate: null,
+    reporting_category: 'payout',
+    source: 'po_payout_123',
+    balance_type: 'payments' as Stripe.BalanceTransaction.BalanceType,
+  },
 ];
 
 export const mockStripeRefund: Stripe.Refund = {

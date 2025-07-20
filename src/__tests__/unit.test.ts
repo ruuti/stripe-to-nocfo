@@ -78,11 +78,37 @@ describe('Unit Tests', () => {
       expect(entry.blueprint.credit_entries!.length).toBe(1);
     });
 
+    it('should create payout entry correctly', async () => {
+      // Arrange
+      const payoutTransaction = mockStripeTransactions[3]!;
+
+      // Act
+      const entry = await transactionProcessor.createEntryFromTransaction(
+        payoutTransaction,
+        []
+      );
+
+      // Assert
+      expect(entry).not.toBeNull();
+      expect(entry!.blueprint_type).toBe('MANUAL');
+      expect(entry!.description).toBe(
+        'txn_payout_123 - Stripe to Bank Account transfer - Payout to bank account'
+      );
+      expect(entry!.blueprint.debet_entries).toBeDefined();
+      expect(entry!.blueprint.debet_entries!.length).toBe(1);
+      expect(entry!.blueprint.debet_entries![0]!.account_id).toBe(4970965);
+      expect(entry!.blueprint.debet_entries![0]!.amount).toBe(100);
+      expect(entry!.blueprint.credit_entries).toBeDefined();
+      expect(entry!.blueprint.credit_entries!.length).toBe(1);
+      expect(entry!.blueprint.credit_entries![0]!.account_id).toBe(4982339);
+      expect(entry!.blueprint.credit_entries![0]!.amount).toBe(100);
+    });
+
     it('should handle unknown transaction types', async () => {
       // Arrange
       const unknownTransaction = {
         ...mockStripeTransactions[0]!,
-        type: 'payout' as any,
+        type: 'unknown_type' as any,
       };
 
       // Act
@@ -98,10 +124,11 @@ describe('Unit Tests', () => {
 
   describe('Mock Data Validation', () => {
     it('should have valid Stripe mock data', () => {
-      expect(mockStripeTransactions).toHaveLength(3);
+      expect(mockStripeTransactions).toHaveLength(4);
       expect(mockStripeTransactions[0]!.type).toBe('payment');
       expect(mockStripeTransactions[1]!.type).toBe('stripe_fee');
       expect(mockStripeTransactions[2]!.type).toBe('refund');
+      expect(mockStripeTransactions[3]!.type).toBe('payout');
     });
 
     it('should have valid NOCFO mock data', () => {
