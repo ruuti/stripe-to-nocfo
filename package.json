@@ -22,7 +22,7 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.3.1",
-    "stripe": "^18.3.0",
+    "stripe": "^18.4.0",
     "winston": "^3.17.0"
   },
   "devDependencies": {
